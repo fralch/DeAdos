@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const storeSesion = async (value) => {
   try {
     await AsyncStorage.setItem('@session_Key', value)
+    // const jsonValue = JSON.stringify(value)
+    // await AsyncStorage.setItem('@storage_Key', jsonValue)
   } catch (e) {
 
   }

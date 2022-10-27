@@ -70,7 +70,7 @@ export default function Inicio() {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#662F9A',
+      backgroundColor: '#742284',
       alignItems: 'center',
       justifyContent:"space-around"
     },

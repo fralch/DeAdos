@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import { StyleSheet, 
         Text, View, Image, 
         TextInput, Button, Alert, 
@@ -10,22 +10,73 @@ import { Ionicons } from '@expo/vector-icons';
 export default function Chat() {
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
+    let messagesArray = [
+        {
+            id: 1,
+            message: 'lorem ipsum dolor sit amet',
+            type: 'yo'
+        },
+        {
+            id: 2,
+            message: 'Hola, soy Fox, tu asistente virtual. ¿En qué puedo ayudarte?',
+            type: 'human'
+        },
+    ]
+
+    const[mensaje, setMensaje] = useState('');
+    const [messages, setMessages] = useState(messagesArray);
+
     
-    const enviar = () => {
-        
-    }
+
+
+    
+
+    const enviar =  () => {
+        if (mensaje === '') {
+            setMensaje('');
+            return 0;
+        }
+        let newMessage = {
+            id: messages.length + 1,
+            message: mensaje,
+            type: 'yo'
+        }
+         setMessages([...messages, newMessage]);
+
+         setMensaje('');
+    }   
     return (
         <View style={styles.container}>
             <View style={styles.from}>
                 <Text style={styles.textFrom}>Mario</Text>
             </View>
             <ScrollView style={styles.body}>
-                <Text style={styles.fromMessage}>Hola, como estas?</Text>
-                <Text style={styles.letterMessage}>Yo estoy bien y tu ? </Text>
+              
+               {
+                messages.map((item, index) => {
+                    if (item.type == 'yo') {
+                        return (
+                            <View key={index} >
+                                <Text style={styles.letterMessage}>{item.message}</Text>
+                            </View>
+                        )
+                    } else {
+                        return (
+                            <View key={index} >
+                                <Text style={styles.fromMessage}>{item.message}</Text>
+                            </View>
+                        )
+                    }
+                    })
+
+                }
+               
             </ScrollView>
             
             <View style={styles.letter}>
-                <TextInput style={[styles.textInput, {width: windowWidth - 20}]} placeholder="Escribe tu mensaje" />
+                <TextInput style={[styles.textInput, {width: windowWidth - 20}]} 
+                placeholder="Escribe tu mensaje" onChangeText={text => setMensaje(text)}  value={mensaje}/>
+
                 <TouchableOpacity onPress={enviar} style={{marginLeft:-30}}>
                     <Ionicons name="send" size={24} color="white" />
                 </TouchableOpacity>
@@ -37,14 +88,14 @@ export default function Chat() {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#662F9A',
+      backgroundColor: '#742284',
       alignItems: 'center',
       justifyContent:"space-between",
       paddingTop: 80
     },
     from:{
         width:"100%",
-        backgroundColor:"#662F9A",
+        backgroundColor:"#742284",
         justifyContent: "flex-end",
         position: 'absolute',
     
@@ -63,10 +114,11 @@ const styles = StyleSheet.create({
         width:"100%",
         height:"80%",
         backgroundColor:"#222222",
+        flexDirection:"column-reverse",
     },
     letter:{
         width:"100%",
-        height:"10%",
+        height:50,
         alignItems:"center",
         flexDirection:"row",
     },
@@ -76,21 +128,22 @@ const styles = StyleSheet.create({
         fontSize:15,
         fontFamily:"sans-serif",
         textAlign:"left",
+        color: "white",
     },
     fromMessage:{
-        color:"#662F9A",
-        fontSize:20,
+        color:"#B840FF",
+        fontSize:18,
         textAlign: "left",
-        marginLeft:20,
-        marginTop:40,
+        marginHorizontal:20,
+        marginVertical:10,
         fontFamily:"sans-serif",
     },
     letterMessage:{
         color:"white",
-        fontSize:20,
+        fontSize:18,
         textAlign: "right",
-        marginRight:20,
-        marginTop:40,
+        marginHorizontal:20,
+        marginVertical:10,
         fontFamily:"sans-serif",
     },
     

@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
 import { storeSesion, removeSesion, getSesion } from './src/hooks/handleSession';
 
+
 import Inicio from './src/components/Inicio';
 import Chat from './src/components/Chat';
 
@@ -13,7 +14,7 @@ export default function App() {
 
   const obtenerSesion = async () => {
     let usuario = await getSesion();
-    if(JSON.parse(usuario).length > 0){
+    if(JSON.parse(usuario)?.length > 0){
       setSession(true);
     }else{
       setSession(false);
@@ -36,7 +37,8 @@ export default function App() {
     </NavigationContainer>) : (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Chat" options={{headerShown: false}} component={Chat} />
+          {/* <Stack.Screen name="Chat" options={{headerShown: false}} component={Chat} /> */}
+          <Stack.Screen name="Inicio" options={{headerShown: false}} component={Inicio} />
         </Stack.Navigator>
       </NavigationContainer>
     )

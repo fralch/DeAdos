@@ -3,23 +3,37 @@ import { StyleSheet, Text, View, Image, TextInput, Button, Alert } from 'react-n
 import { RadioButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { storeSesion, removeSesion } from '../hooks/handleSession';
+import {db} from '../../firebaseConfig';
+import { collection, addDoc } from "firebase/firestore"; 
 
 export default function Inicio() {
     const [checked, setChecked] = useState('female');
     const [nombre, setNombre] = useState('');
 
     const handlePress = async () => {
-        if (nombre === '') {
-            Alert.alert('Error', 'Debes ingresar un nombre');
-            return 0; 
-        } 
-        let data = {
-            nombre: nombre,
-            sexo: checked
-        }
-        await storeSesion(JSON.stringify(data));
+        // if (nombre === '') {
+        //     Alert.alert('Error', 'Debes ingresar un nombre');
+        //     return 0; 
+        // } 
+        // let data = {
+        //     id_para: 'probabdo',
+        //     idioma: 'en'
+        // }
+        // await storeSesion(JSON.stringify(data));
+        //  await addDoc((collection, 'Usuarios'), data);
 
-        Alert.alert('Exito', 'Sesion iniciada');
+        // Alert.alert('Exito', 'Sesion iniciada');
+        
+
+        try {
+            const docRef = await addDoc(collection(db, "Usuarios"), {
+              id_para: "Eva",
+              idioma: "en"
+            });
+            console.log("Document written with ID: ", docRef.id);
+          } catch (e) {
+            console.error("Error adding document: ", e);
+          }
     }
     const cerrarSesion = async () => {
         await removeSesion();
@@ -48,11 +62,11 @@ export default function Inicio() {
                     onPress={() => setChecked('male')}
                 />
                 <Text  style={styles.text} >Varón</Text>
-                {/* <Button
+                <Button
                 title="cerrar sesion"
                 color="#353535"
                 onPress={cerrarSesion}
-                /> */}
+                />
             </View>
             <Button
                 title="Iniciar"

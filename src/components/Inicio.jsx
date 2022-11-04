@@ -5,26 +5,27 @@ import { useNavigation } from '@react-navigation/native';
 import { storeSesion, removeSesion } from '../hooks/handleSession';
 import {db} from '../../firebaseConfig';
 import { collection, addDoc } from "firebase/firestore"; 
+import SelectDropdown from 'react-native-select-dropdown'
 
 export default function Inicio() {
-    const [checked, setChecked] = useState('female');
-    const [nombre, setNombre] = useState('');
+    const languages = ['English', 'Español', 'Français', 'Deutsch', 'Italiano', 'Português']; 
+    const [language, setLanguage] = useState(null);
     const navigation = useNavigation();
     const handlePress = async () => {       
-        if (nombre === '') {
-            Alert.alert('Error', 'Debes ingresar un nombre');
+        if (language === null) {
             return 0; 
         } 
         try {
+           
             const docRef = await addDoc(collection(db, "Usuarios"), {
-              idioma: "en"
+              idioma: language
             });
             console.log("Document written with ID: ", docRef.id);
 
             
             let data = {
                 id_para: docRef.id,
-                idioma: 'en'
+                idioma: language
             }
             await storeSesion(JSON.stringify(data));
             navigation.navigate('Chat');
@@ -42,24 +43,36 @@ export default function Inicio() {
     <View style={styles.container}>
         <Image source={require('../../assets/logoFox.png')} style={styles.logo} />
         <View >
-            <Text  style={styles.text} >Ingresa tu nombre</Text>
-            <TextInput style={styles.input} placeholder="|" onChangeText={setNombre} value={nombre} />
-            <View style={styles.radios}>
-                <RadioButton
-                    value="female"
-                    status={checked == 'female' ? 'checked' : 'unchecked'}
-                    color="#fff"
-                    onPress={() => setChecked('female')}
+            <SelectDropdown
+                    data={languages}
+                    onSelect={(selectedItem, index) => {
+                        if (selectedItem == 'English') {
+                             setLanguage('en');
+                        } else if (language == 'Español') {
+                             setLanguage('es');
+                        } else if (language == 'Français') {
+                             setLanguage('fr');
+                        } else if (language == 'Deutsch') {
+                             setLanguage('de');
+                        } else if (language == 'Italiano') {
+                             setLanguage('it');
+                        } else if (language == 'Português') {
+                            setLanguage('pt');                
+                        }
+                        console.log(selectedItem);
+                    }}
+                     buttonTextAfterSelection={(selectedItem, index) => {
+                        // text represented after item is selected
+                        // if data array is an array of objects then return selectedItem.property to render after item is selected
+                        return selectedItem
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        // text represented for each item in dropdown
+                        // if data array is an array of objects then return item.property to represent item in dropdown
+                        return item
+                    }}
                 />
-                <Text  style={styles.text} >Mujer</Text>
-                <RadioButton
-                    value="male"
-                    label="Carto Base MAp"
-                    status={ checked == "male" ? 'checked' : 'unchecked' }
-                    color="#fff"
-                    onPress={() => setChecked('male')}
-                />
-                <Text  style={styles.text} >Varón</Text>
+            <View style={styles.radios}>   
                 <Button
                 title="cerrar sesion"
                 color="#353535"

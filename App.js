@@ -31,7 +31,7 @@ export default function App() {
   return (
     session ? (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Chat">
+      <Stack.Navigator initialRouteName="Inicio">
         <Stack.Screen name="Inicio" options={{headerShown: false}} component={Inicio} />
         <Stack.Screen name="Chat" options={{headerShown: false}} component={Chat} />
       </Stack.Navigator>

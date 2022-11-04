@@ -45,6 +45,16 @@ export default function Chat() {
 
          setMensaje('');
     }   
+    //api traductor 
+    // const translateText = async (text ="Hola") => {
+    //     const API_KEY = 'AIzaSyC1pvAVod6kZa5g8LOhArHrAchbLHEXUd0';
+    //     const API_URL = 'https://translation.googleapis.com/language/translate/v2';
+    //     const response = await fetch(${API_URL}?key=${API_KEY}&q=${text}&source=es&target=en);
+    //     const data = await response.json();
+    //     console.log('Traductor', data.data.translations[0].translatedText);
+
+    // }
+
     return (
         <View style={styles.container}>
             <View style={styles.from}>

@@ -9,31 +9,29 @@ import { collection, addDoc } from "firebase/firestore";
 export default function Inicio() {
     const [checked, setChecked] = useState('female');
     const [nombre, setNombre] = useState('');
-
-    const handlePress = async () => {
-        // if (nombre === '') {
-        //     Alert.alert('Error', 'Debes ingresar un nombre');
-        //     return 0; 
-        // } 
-        // let data = {
-        //     id_para: 'probabdo',
-        //     idioma: 'en'
-        // }
-        // await storeSesion(JSON.stringify(data));
-        //  await addDoc((collection, 'Usuarios'), data);
-
-        // Alert.alert('Exito', 'Sesion iniciada');
-        
-
+    const navigation = useNavigation();
+    const handlePress = async () => {       
+        if (nombre === '') {
+            Alert.alert('Error', 'Debes ingresar un nombre');
+            return 0; 
+        } 
         try {
             const docRef = await addDoc(collection(db, "Usuarios"), {
-              id_para: "Eva",
               idioma: "en"
             });
             console.log("Document written with ID: ", docRef.id);
+
+            
+            let data = {
+                id_para: docRef.id,
+                idioma: 'en'
+            }
+            await storeSesion(JSON.stringify(data));
+            navigation.navigate('Chat');
           } catch (e) {
             console.error("Error adding document: ", e);
           }
+          
     }
     const cerrarSesion = async () => {
         await removeSesion();

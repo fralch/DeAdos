@@ -12,11 +12,11 @@ export default function Inicio() {
     const [language, setLanguage] = useState(null);
     const navigation = useNavigation();
     const handlePress = async () => {       
+        console.log(language)
         if (language === null) {
             return 0; 
         } 
         try {
-           
             const docRef = await addDoc(collection(db, "Usuarios"), {
               idioma: language
             });
@@ -48,20 +48,19 @@ export default function Inicio() {
                     onSelect={(selectedItem, index) => {
                         if (selectedItem == 'English') {
                              setLanguage('en');
-                        } else if (language == 'Español') {
+                        } else if (selectedItem == 'Español') {
                              setLanguage('es');
-                        } else if (language == 'Français') {
+                        } else if (selectedItem == 'Français') {
                              setLanguage('fr');
-                        } else if (language == 'Deutsch') {
+                        } else if (selectedItem == 'Deutsch') {
                              setLanguage('de');
-                        } else if (language == 'Italiano') {
+                        } else if (selectedItem == 'Italiano') {
                              setLanguage('it');
-                        } else if (language == 'Português') {
+                        } else if (selectedItem == 'Português') {
                             setLanguage('pt');                
                         }
-                        console.log(selectedItem);
                     }}
-                     buttonTextAfterSelection={(selectedItem, index) => {
+                    buttonTextAfterSelection={(selectedItem, index) => {
                         // text represented after item is selected
                         // if data array is an array of objects then return selectedItem.property to render after item is selected
                         return selectedItem
@@ -69,6 +68,7 @@ export default function Inicio() {
                     rowTextForSelection={(item, index) => {
                         // text represented for each item in dropdown
                         // if data array is an array of objects then return item.property to represent item in dropdown
+                       
                         return item
                     }}
                 />

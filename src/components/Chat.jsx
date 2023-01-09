@@ -38,6 +38,13 @@ export default function Chat() {
             querySnapshot.forEach((doc) => {
                 console.log(doc.id, " => ", doc.data());
             });
+            // agregar coleccion dentro de doc
+            const docRef = await addDoc(collection(db, "Usuarios", "aRuKmpiq05YnUquLSxDP", "Mensajes"), {
+                message: 'Hola, soy Fox, tu asistente virtual. ¿En qué puedo ayudarte?',
+
+            });
+            console.log("Document written with ID: ", docRef.id);
+           
         }
         getUser();
     }, []);

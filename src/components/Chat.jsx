@@ -6,6 +6,9 @@ import { StyleSheet,
 import { RadioButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { getSesion } from '../hooks/handleSession';
+import {db} from '../../firebaseConfig';
+import { collection, addDoc , getDocs, where, query, documentId} from "firebase/firestore";
+
 import { Ionicons } from '@expo/vector-icons'; 
 export default function Chat() {
     const windowWidth = Dimensions.get('window').width;
@@ -26,6 +29,18 @@ export default function Chat() {
     const[mensaje, setMensaje] = useState('');
     const [messages, setMessages] = useState(messagesArray);
 
+    useEffect(() => {
+        console.log('useEffect');
+        const getUser = async () => {
+            // get user from id of firebase
+            const q = query(collection(db, "Usuarios"), where(documentId(), '==',  "aRuKmpiq05YnUquLSxDP"));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                console.log(doc.id, " => ", doc.data());
+            });
+        }
+        getUser();
+    }, []);
     
 
 

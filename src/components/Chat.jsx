@@ -7,7 +7,7 @@ import { RadioButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { getSesion } from '../hooks/handleSession';
 import {db} from '../../firebaseConfig';
-import { collection, addDoc , getDocs, where, query, documentId} from "firebase/firestore";
+import { collection, addDoc , getDocs, where, query, documentId, updateDoc, doc, deleteDoc} from "firebase/firestore";
 
 import { Ionicons } from '@expo/vector-icons'; 
 export default function Chat() {
@@ -31,20 +31,31 @@ export default function Chat() {
 
     useEffect(() => {
         console.log('useEffect');
+      
         const getUser = async () => {
+            let usuario = await getSesion();
+            usuario = JSON.parse(usuario).id_para;
+            console.log(usuario);
+
             // get user from id of firebase
-            const q = query(collection(db, "Usuarios"), where(documentId(), '==',  "aRuKmpiq05YnUquLSxDP"));
+            const q = query(collection(db, "Usuarios"), where(documentId(), '==',  usuario));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 console.log(doc.id, " => ", doc.data());
             });
             // agregar coleccion dentro de doc
-            const docRef = await addDoc(collection(db, "Usuarios", "aRuKmpiq05YnUquLSxDP", "Mensajes"), {
+            const docRef = await addDoc(collection(db, "Usuarios", usuario, "Mensajes"), {
                 message: 'Hola, soy Fox, tu asistente virtual. ¿En qué puedo ayudarte?',
 
             });
-            console.log("Document written with ID: ", docRef.id);
-           
+           console.log("Document written with ID: ", docRef.id);
+            // borrar datos de Mensajes 
+             const borrar = await deleteDoc(doc(db, "Usuarios", usuario, "Mensajes", docRef.id));
+            // // actualizar datos de Mensajes
+            // const actualizar = await updateDoc(doc(db, "Usuarios", usuario, "Mensajes", docRef.id), {
+            //     message: 'Probando actualizar',
+            // });
+            
         }
         getUser();
     }, []);

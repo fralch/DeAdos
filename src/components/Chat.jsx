@@ -10,15 +10,15 @@ import {db} from '../../firebaseConfig';
 import { collection, addDoc , getDocs, where, query, documentId, updateDoc, doc, deleteDoc} from "firebase/firestore";
 
 import { Ionicons } from '@expo/vector-icons'; 
+import { async } from '@firebase/util';
 export default function Chat() {
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
+
+    
+    
     let messagesArray = [
-        {
-            id: 1,
-            message: 'lorem ipsum dolor sit amet',
-            type: 'yo'
-        },
+       
         {
             id: 2,
             message: 'Hola, soy Fox, tu asistente virtual. ¿En qué puedo ayudarte?',
@@ -28,6 +28,7 @@ export default function Chat() {
 
     const[mensaje, setMensaje] = useState('');
     const [messages, setMessages] = useState(messagesArray);
+    const [Usuario, setUsuario] = useState('');
 
     useEffect(() => {
         console.log('useEffect');
@@ -35,26 +36,26 @@ export default function Chat() {
         const getUser = async () => {
             let usuario = await getSesion();
             usuario = JSON.parse(usuario).id_para;
-            console.log(usuario);
+            setUsuario(usuario);
 
             // get user from id of firebase
             const q = query(collection(db, "Usuarios"), where(documentId(), '==',  usuario));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-                console.log(doc.id, " => ", doc.data());
+                console.log('resultado dela consulta de firebase',doc.id, " => ", doc.data());
             });
-            // agregar coleccion dentro de doc
-            const docRef = await addDoc(collection(db, "Usuarios", usuario, "Mensajes"), {
-                message: 'Hola, soy Fox, tu asistente virtual. ¿En qué puedo ayudarte?',
+            
+            // console.log("Document written with ID: ", docRef.id);
 
-            });
-           console.log("Document written with ID: ", docRef.id);
+
             // borrar datos de Mensajes 
-             const borrar = await deleteDoc(doc(db, "Usuarios", usuario, "Mensajes", docRef.id));
+            //  const borrar = await deleteDoc(doc(db, "Usuarios", usuario, "Mensajes", docRef.id));
+
+
             // // actualizar datos de Mensajes
-            // const actualizar = await updateDoc(doc(db, "Usuarios", usuario, "Mensajes", docRef.id), {
-            //     message: 'Probando actualizar',
-            // });
+                // const actualizar = await updateDoc(doc(db, "Usuarios", usuario, "Mensajes", docRef.id), {
+                //     message: 'Probando actualizar',
+                // });
             
         }
         getUser();
@@ -69,12 +70,23 @@ export default function Chat() {
             setMensaje('');
             return 0;
         }
-        let newMessage = {
-            id: messages.length + 1,
-            message: mensaje,
-            type: 'yo'
+
+    
+        async function subirMensajeFB() {
+            // agregar coleccion dentro de doc
+            const docRef = await addDoc(collection(db, "Usuarios", Usuario, "Mensajes"), {
+                message: mensaje,
+            });
+            let newMessage = {
+                id: docRef.id,
+                message: mensaje,
+                type: 'yo'
+            }
+            setMessages([...messages, newMessage]);
         }
-         setMessages([...messages, newMessage]);
+        subirMensajeFB();
+
+
 
          setMensaje('');
     }   

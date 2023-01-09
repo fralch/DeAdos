@@ -18,7 +18,8 @@ export default function Inicio() {
         } 
         try {
             const docRef = await addDoc(collection(db, "Usuarios"), {
-              idioma: language
+              idioma: language, 
+              libre: 1
             });
             console.log("Document written with ID: ", docRef.id);
 
